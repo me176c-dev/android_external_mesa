@@ -307,7 +307,7 @@ anv_physical_device_init(struct anv_physical_device *device,
    if (result != VK_SUCCESS)
       goto fail;
 
-   device->has_exec_async = anv_gem_get_param(fd, I915_PARAM_HAS_EXEC_ASYNC);
+   device->has_exec_async = false;
 
    if (!anv_device_get_cache_uuid(device->uuid, device->chipset_id)) {
       result = vk_errorf(VK_ERROR_INITIALIZATION_FAILED,
