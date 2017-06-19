@@ -32,6 +32,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := mesa_gen_matypes
+LOCAL_MULTILIB := 32
 LOCAL_IS_HOST_MODULE := true
 
 LOCAL_C_INCLUDES := \
