@@ -77,9 +77,14 @@ LOCAL_CONLYFLAGS += \
 
 ifeq ($(strip $(MESA_ENABLE_ASM)),true)
 ifeq ($(TARGET_ARCH),x86)
-LOCAL_CFLAGS += \
-	-DUSE_X86_ASM
+asm_flags := \
+	-DUSE_X86_ASM \
+	-DUSE_MMX_ASM \
+	-DUSE_3DNOW_ASM \
+	-DUSE_SSE_ASM
 
+LOCAL_CFLAGS += $(asm_flags)
+LOCAL_ASFLAGS += $(asm_flags)
 endif
 endif
 
