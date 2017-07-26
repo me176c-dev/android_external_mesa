@@ -58,7 +58,9 @@
 
 #include <system/window.h>
 #include "platform_android_gralloc_drm.h"
+#ifdef HAVE_GRALLOC1
 #include <hardware/gralloc1.h>
+#endif
 #include <hardware/gralloc.h>
 #include <cutils/log.h>
 
@@ -217,8 +219,12 @@ struct dri2_egl_display
 #ifdef HAVE_ANDROID_PLATFORM
    const hw_module_t *gralloc;
    uint16_t gralloc_version;
+#ifdef HAVE_GRALLOC1
    gralloc1_device_t *gralloc1_dvc;
    GRALLOC1_PFN_LOCK_FLEX pfn_lockflex;
+   GRALLOC1_PFN_GET_FORMAT pfn_getFormat;
+   GRALLOC1_PFN_UNLOCK pfn_unlock;
+#endif
 #endif
 
    int                       is_render_node;
