@@ -47,8 +47,8 @@ struct build_id_note {
 };
 
 struct callback_data {
-   /* Base address of shared object, taken from Dl_info::dli_fbase */
-   const void *dli_fbase;
+   /* Path name of shared object, taken from Dl_info::dli_fname */
+   const char *dli_fname;
 
    struct build_id_note *note;
 };
@@ -58,7 +58,13 @@ build_id_find_nhdr_callback(struct dl_phdr_info *info, size_t size, void *data_)
 {
    struct callback_data *data = data_;
 
-   if ((void *)info->dlpi_addr != data->dli_fbase)
+   /* The first object visited by callback is the main program.
+    * Android's libc returns a NULL pointer for the first executable.
+    */
+   if (info->dlpi_name == NULL)
+      return 0;
+
+   if (strcmp(info->dlpi_name, data->dli_fname))
       return 0;
 
    for (unsigned i = 0; i < info->dlpi_phnum; i++) {
@@ -97,11 +103,11 @@ build_id_find_nhdr_for_addr(const void *addr)
    if (!dladdr(addr, &info))
       return NULL;
 
-   if (!info.dli_fbase)
+   if (!info.dli_fname)
       return NULL;
 
    struct callback_data data = {
-      .dli_fbase = info.dli_fbase,
+      .dli_fname = info.dli_fname,
       .note = NULL,
    };
 
