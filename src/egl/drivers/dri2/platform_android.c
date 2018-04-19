@@ -57,8 +57,7 @@ struct droid_yuv_format {
  * system/core/include/system/graphics.h
  */
 enum {
-   HAL_PIXEL_FORMAT_NV12_Y_TILED_INTEL = 0x100,
-   HAL_PIXEL_FORMAT_NV12 = 0x10F,
+   HAL_PIXEL_FORMAT_NV12 = 0x102,
 };
 
 /* The following table is used to look up a DRI image FourCC based
@@ -70,7 +69,6 @@ static const struct droid_yuv_format droid_yuv_formats[] = {
    { HAL_PIXEL_FORMAT_YCbCr_420_888,   1, 1, __DRI_IMAGE_FOURCC_YVU420 },
    { HAL_PIXEL_FORMAT_YV12,            1, 1, __DRI_IMAGE_FOURCC_YVU420 },
    { HAL_PIXEL_FORMAT_NV12,            0, 2, __DRI_IMAGE_FOURCC_NV12 },
-   { HAL_PIXEL_FORMAT_NV12_Y_TILED_INTEL, 0, 2, __DRI_IMAGE_FOURCC_NV12 },
    /* HACK: See droid_create_image_from_prime_fd() and
     * https://issuetracker.google.com/32077885. */
    { HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED,   0, 2, __DRI_IMAGE_FOURCC_NV12 },
@@ -718,11 +716,11 @@ static int get_ycbcr_from_flexlayout(struct android_flex_layout *outFlexLayout, 
        switch(outFlexLayout->planes[i].component){
          case FLEX_COMPONENT_Y:
              ycbcr->y = outFlexLayout->planes[i].top_left;
-             ycbcr->ystride = outFlexLayout->planes[i].v_increment;
+             ycbcr->ystride = outFlexLayout->planes[i].h_increment;
          break;
          case FLEX_COMPONENT_Cb:
              ycbcr->cb = outFlexLayout->planes[i].top_left;
-             ycbcr->cstride = outFlexLayout->planes[i].v_increment;
+             ycbcr->cstride = outFlexLayout->planes[i].h_increment;
          break;
          case FLEX_COMPONENT_Cr:
              ycbcr->cr = outFlexLayout->planes[i].top_left;
